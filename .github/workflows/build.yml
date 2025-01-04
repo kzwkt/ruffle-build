@@ -11,18 +11,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-22.04
-
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Set up Rust
-        uses: rust-lang/actions-rust@v1
-        with:
-          rust-version: stable
-
-      - name: Build project
-        run: cargo build --release
-
-      - name: Run tests
-        run: cargo test
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - run: cargo test --all-features
