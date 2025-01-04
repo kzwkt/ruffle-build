@@ -43,6 +43,21 @@ jobs:
         run: |
           cd ruffle  # Ensure you're in the ruffle directory
           cargo build --release --package=ruffle_desktop
-          cargo run --release --package=ruffle_desktop
+          mkdir -p package/ruffle
+          mkdir -p package/extras
+          cp target/release/ruffle_desktop package/ruffle/
+          cp desktop/packages/linux/rs.ruffle.Ruffle.desktop package/extras/
+          cp desktop/packages/linux/rs.ruffle.Ruffle.metainfo.xml package/extras/
+          cp desktop/packages/linux/rs.ruffle.Ruffle.svg package/extras/
+          cd package
+          tar -czvf ../ruffle-linux-package.tar.gz *
+          
+          
+      # Upload the tarball as an artifact
+      - name: Upload Release Tarball
+        uses: actions/upload-artifact@v4
+        with:
+          name: ruffle-linux-package
+          path: ruffle-linux-package.tar.gz
 
           
