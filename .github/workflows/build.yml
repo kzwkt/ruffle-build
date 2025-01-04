@@ -14,4 +14,35 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@stable
-      - run: cargo run --release --package=ruffle_desktop
+
+# Install system dependencies required by Ruffle Desktop
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            libasound2-dev \
+            libxcb-shape0-dev \
+            libxcb-xfixes0-dev \
+            libgtk-3-dev \
+            libudev-dev \
+            libxcb-xinput-dev \
+            libxcb-xkb-dev \
+            libxcb-cursor-dev \
+            default-jre-headless \
+            cmake \
+            g++
+
+      # Clone the Ruffle repository (if needed)
+      - name: Clone Ruffle repository
+        run: |
+          git clone https://github.com/ruffle-rs/ruffle.git  --depth=1
+          cd ruffle
+
+      # Build and run the ruffle_desktop package
+      - name: Build and run Ruffle Desktop
+        run: |
+          cd ruffle  # Ensure you're in the ruffle directory
+          cargo build --release --package=ruffle_desktop
+          cargo run --release --package=ruffle_desktop
+
+          
